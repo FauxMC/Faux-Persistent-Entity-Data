@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "faux-persistent-entity-data",
+  "version": "${version}",
+  "name": "Faux-Persistent-Entity-Data",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/faux-persistent-entity-data/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.faux.persistententitydata.PersistentEntityData"
+    ]
+  },
+  "mixins": [
+    "Faux-Persistent-Entity-Data.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "minecraft": "1.18.1"
+  }
+}

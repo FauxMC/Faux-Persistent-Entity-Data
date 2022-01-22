@@ -7,8 +7,8 @@ import net.minecraft.nbt.CompoundTag;
  */
 public interface ICustomDataHolder {
 
-    CompoundTag fepd$getCustomData();
+    CompoundTag faux$getCustomData();
 
-    void fepd$setLifetimeData(CompoundTag tag);
+    void faux$setCustomData(CompoundTag tag);
 
 }

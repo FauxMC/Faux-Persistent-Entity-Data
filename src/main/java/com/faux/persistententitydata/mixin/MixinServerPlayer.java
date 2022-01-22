@@ -17,12 +17,12 @@ public class MixinServerPlayer implements IPersistentDataHolder {
     public void restoreFrom(ServerPlayer other, boolean keepEverything, CallbackInfo ci) {
 
         IPersistentDataHolder oldHolder = (IPersistentDataHolder) other;
-        this.fepd$setPersistentData(oldHolder.fepd$getPersistentData());
+        this.faux$setPersistentData(oldHolder.faux$getPersistentData());
     }
 
     @Override
-    public CompoundTag fepd$getPersistentData() {
-        CompoundTag lifetimeData = ((ICustomDataHolder) this).fepd$getCustomData();
+    public CompoundTag faux$getPersistentData() {
+        CompoundTag lifetimeData = ((ICustomDataHolder) this).faux$getCustomData();
         if (!lifetimeData.contains(PersistentEntityDataConstants.PERSISTENT_NBT_KEY)) {
             CompoundTag tag = new CompoundTag();
             lifetimeData.put(PersistentEntityDataConstants.PERSISTENT_NBT_KEY, tag);
@@ -32,7 +32,7 @@ public class MixinServerPlayer implements IPersistentDataHolder {
     }
 
     @Override
-    public void fepd$setPersistentData(CompoundTag tag) {
-        ((ICustomDataHolder) this).fepd$getCustomData().put(PersistentEntityDataConstants.PERSISTENT_NBT_KEY, tag);
+    public void faux$setPersistentData(CompoundTag tag) {
+        ((ICustomDataHolder) this).faux$getCustomData().put(PersistentEntityDataConstants.PERSISTENT_NBT_KEY, tag);
     }
 }

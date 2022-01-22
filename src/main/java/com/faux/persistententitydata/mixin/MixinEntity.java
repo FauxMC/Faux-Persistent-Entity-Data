@@ -16,30 +16,30 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinEntity implements ICustomDataHolder {
 
     @Unique
-    public CompoundTag fppd$persistentData;
+    public CompoundTag faux$persistentData;
 
     @Override
-    public CompoundTag fepd$getCustomData() {
-        if (fppd$persistentData == null)
-            fppd$persistentData = new CompoundTag();
+    public CompoundTag faux$getCustomData() {
+        if (faux$persistentData == null)
+            faux$persistentData = new CompoundTag();
 
-        return fppd$persistentData;
+        return faux$persistentData;
     }
 
     @Override
-    public void fepd$setLifetimeData(CompoundTag tag) {
-        fppd$persistentData = tag;
+    public void faux$setCustomData(CompoundTag tag) {
+        faux$persistentData = tag;
     }
 
     @Inject(method = "saveWithoutId", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", shift = At.Shift.BEFORE))
     public void saveWithoutId(CompoundTag compoundTag, CallbackInfoReturnable<CompoundTag> cir) {
-        compoundTag.put(PersistentEntityDataConstants.CUSTOM_NBT_KEY, fepd$getCustomData());
+        compoundTag.put(PersistentEntityDataConstants.CUSTOM_NBT_KEY, faux$getCustomData());
     }
 
     @Inject(method = "load", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", shift = At.Shift.BEFORE))
     public void load(CompoundTag compoundTag, CallbackInfo ci) {
         if (compoundTag.contains(PersistentEntityDataConstants.CUSTOM_NBT_KEY, Tag.TAG_COMPOUND)) {
-            fepd$setLifetimeData(compoundTag.getCompound(PersistentEntityDataConstants.CUSTOM_NBT_KEY));
+            faux$setCustomData(compoundTag.getCompound(PersistentEntityDataConstants.CUSTOM_NBT_KEY));
         }
     }
 

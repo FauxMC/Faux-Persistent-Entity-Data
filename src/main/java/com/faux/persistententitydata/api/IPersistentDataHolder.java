@@ -7,8 +7,8 @@ import net.minecraft.nbt.CompoundTag;
  */
 public interface IPersistentDataHolder {
 
-    CompoundTag fepd$getPersistentData();
+    CompoundTag faux$getPersistentData();
 
-    void fepd$setPersistentData(CompoundTag tag);
+    void faux$setPersistentData(CompoundTag tag);
 
 }

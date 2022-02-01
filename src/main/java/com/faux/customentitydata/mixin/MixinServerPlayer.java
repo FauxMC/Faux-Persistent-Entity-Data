@@ -1,8 +1,8 @@
-package com.faux.persistententitydata.mixin;
+package com.faux.customentitydata.mixin;
 
-import com.faux.persistententitydata.api.ICustomDataHolder;
-import com.faux.persistententitydata.api.IPersistentDataHolder;
-import com.faux.persistententitydata.api.PersistentEntityDataConstants;
+import com.faux.customentitydata.api.ICustomDataHolder;
+import com.faux.customentitydata.api.IPersistentDataHolder;
+import com.faux.customentitydata.api.PersistentEntityDataConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;

@@ -10,6 +10,8 @@
   "icon": "assets/faux-custom-entity-data/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+    ]
   },
   "mixins": [
     "Faux-Custom-Entity-Data.mixins.json"

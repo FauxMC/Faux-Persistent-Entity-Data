@@ -10,14 +10,12 @@
   "icon": "assets/faux-custom-entity-data/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-    ]
   },
   "mixins": [
     "Faux-Custom-Entity-Data.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.12.12",
-    "minecraft": "1.18.1"
+    "fabricloader": ">=0.13",
+    "minecraft": "1.18.2"
   }
 }

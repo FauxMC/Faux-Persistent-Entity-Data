@@ -1,7 +1,7 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
-    id 'net.darkhax.curseforgegradle' version '1.0.10'
+    id 'net.darkhax.curseforgegradle' version '1.0.11'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -68,6 +68,7 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
     def mainFile = upload(575305, file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"))
     mainFile.changelog = project.ext.mod_changelog
     mainFile.releaseType = 'release'
+    mainFile.changelogType = 'markdown'
     def sourcesFile = mainFile.withAdditionalFile(sourcesJar)
     def javadocFile = mainFile.withAdditionalFile(javadocJar)
 }

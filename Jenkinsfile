@@ -6,6 +6,7 @@ pipeline {
         jdk "jdk-17.0.1"
     }
     environment {
+        MODRINTH_API_TOKEN     = credentials('jared-modrinth-token')
         CURSEFORGE_API_TOKEN     = credentials('jared-curseforge-token')
     }
     stages {
@@ -33,7 +34,7 @@ pipeline {
                 stage('Publish CurseForge') {
                     steps {
                         echo 'Deploying to CurseForge'
-                        sh './gradlew publishCurseForge'
+                        sh './gradlew publishCurseForge modrinth'
                     }
                 }
             }

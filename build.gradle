@@ -2,6 +2,7 @@ plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
     id 'maven-publish'
     id 'net.darkhax.curseforgegradle' version '1.0.11'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -71,4 +72,15 @@ task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge)
     mainFile.changelogType = 'markdown'
     def sourcesFile = mainFile.withAdditionalFile(sourcesJar)
     def javadocFile = mainFile.withAdditionalFile(javadocJar)
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_API_TOKEN")
+    projectId = "E7ZFR7qk"
+    versionNumber = "${version}"
+    versionType = "release"
+    uploadFile = remapJar
+    dependencies {
+        required.project "fabric-api"
+    }
 }

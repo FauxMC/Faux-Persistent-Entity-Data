@@ -22,6 +22,6 @@ public class MixinPlayerDataStorage {
     @Inject(method = "save(Lnet/minecraft/world/entity/player/Player;)V", at = @At("RETURN"))
     private void onPlayerSave(Player player, CallbackInfo info) {
 
-        IPlayerSaveListener.EVENT.invoker().savePlayerData(player, this.playerDir);
+        IPlayerSaveListener.EVENT.invoker().savePlayerData(player, this.playerDir.toPath());
     }
 }

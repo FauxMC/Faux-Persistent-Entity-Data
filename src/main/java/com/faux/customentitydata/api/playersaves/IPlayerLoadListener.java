@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.entity.player.Player;
 
 import java.io.File;
+import java.nio.file.Path;
 
 /**
  * An event listener that is notified when player data is read from the disk. This listener will be notified after the
@@ -27,5 +28,5 @@ public interface IPlayerLoadListener {
      * @param player  The player that is being loaded.
      * @param saveDir The save folder.
      */
-    void loadPlayerData(Player player, File saveDir);
+    void loadPlayerData(Player player, Path saveDir);
 }

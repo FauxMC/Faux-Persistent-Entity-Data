@@ -24,7 +24,7 @@ public class MixinPlayerList {
 
         if (this.playerIo instanceof AccessorPlayerDataStorage accessor) {
 
-            IPlayerLoadListener.EVENT.invoker().loadPlayerData(player, accessor.faux$getSaveDir());
+            IPlayerLoadListener.EVENT.invoker().loadPlayerData(player, accessor.faux$getSaveDir().toPath());
         }
     }
 }

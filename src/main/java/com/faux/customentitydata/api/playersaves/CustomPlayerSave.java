@@ -2,6 +2,7 @@ package com.faux.customentitydata.api.playersaves;
 
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * This class provides a custom player data solution that stores player data in a separate auxiliary file in the player
@@ -71,24 +74,20 @@ public abstract class CustomPlayerSave implements IPlayerSaveListener, IPlayerLo
     public abstract void loadPlayer(Player player, CompoundTag saveData);
 
     @Override
-    public void loadPlayerData(Player player, File saveDir) {
+    public void loadPlayerData(Player player, Path saveDir) {
 
         final long startTime = System.nanoTime();
-        final File customSaveDir = getCustomSaveDir(saveDir);
+        final Path customSaveDir = getCustomSaveDir(saveDir);
         CompoundTag data = new CompoundTag();
 
         // Attempt to read the save file as NBT
         try {
 
-            final File targetSave = new File(customSaveDir, player.getStringUUID() + ".dat");
-
-            if (targetSave.exists() && targetSave.isFile()) {
-
-                data = NbtIo.readCompressed(targetSave);
+            final Path targetSave = customSaveDir.resolve(player.getStringUUID() + ".dat");
+            if(Files.exists(targetSave) && Files.isRegularFile(targetSave)) {
+                data = NbtIo.readCompressed(targetSave, NbtAccounter.unlimitedHeap());
             }
-        }
-
-        catch (IOException e) {
+        } catch (IOException e) {
 
             this.log.error("Failed to read custom data file for player {} ({}).", player.getName().getString(), player.getStringUUID(), e);
         }
@@ -99,36 +98,32 @@ public abstract class CustomPlayerSave implements IPlayerSaveListener, IPlayerLo
             this.loadPlayer(player, data);
             final long endTime = System.nanoTime();
             this.log.debug("Loaded data for {}. Took {}ns.", player.getName().getString(), endTime - startTime);
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
 
             this.log.error("Failed to read custom data for player {} ({}).", player.getName().getString(), player.getStringUUID(), e);
         }
     }
 
     @Override
-    public void savePlayerData(Player player, File saveDir) {
+    public void savePlayerData(Player player, Path saveDir) {
 
         try {
 
             final long startTime = System.nanoTime();
-            final File customSaveDir = getCustomSaveDir(saveDir);
+            final Path customSaveDir = getCustomSaveDir(saveDir);
 
             // Write save data to a temporary location.
-            final File tempSave = File.createTempFile(player.getStringUUID() + "-", ".dat", customSaveDir);
+            final Path tempSave = Files.createTempFile(customSaveDir,player.getStringUUID() + "-", ".dat");
             NbtIo.writeCompressed(this.savePlayer(player), tempSave);
 
             // Backup existing save and overwrite with new data.
-            final File targetSave = new File(customSaveDir, player.getStringUUID() + ".dat");
-            final File backupSave = new File(customSaveDir, player.getStringUUID() + ".dat_old");
+            final Path targetSave = customSaveDir.resolve(player.getStringUUID() + ".dat");
+            final Path backupSave = customSaveDir.resolve(player.getStringUUID() + ".dat_old");
             Util.safeReplaceFile(targetSave, tempSave, backupSave);
             final long endTime = System.nanoTime();
 
             this.log.debug("Saved data for {}. Took {}ns.", player.getName().getString(), endTime - startTime);
-        }
-
-        catch (IOException e) {
+        } catch (IOException e) {
 
             this.log.error("Failed to write custom data for player {} ({}).", player.getName().getString(), player.getStringUUID(), e);
         }
@@ -141,15 +136,15 @@ public abstract class CustomPlayerSave implements IPlayerSaveListener, IPlayerLo
      * @param saveDir The root save directory. This is intended to be the player save directory.
      * @return The subdirectory for custom player files.
      */
-    private File getCustomSaveDir(File saveDir) {
+    private Path getCustomSaveDir(Path saveDir) {
+        final Path customSaveDir = saveDir.resolve(handlerId.getNamespace()).resolve(handlerId.getPath());
 
-        final File customSaveDir = new File(new File(saveDir, handlerId.getNamespace()), handlerId.getPath());
-
-        if (!customSaveDir.exists()) {
-
-            if (!customSaveDir.mkdirs()) {
-
-                this.log.error("Failed to create custom save directory {}.", customSaveDir.getPath());
+        if (Files.notExists(customSaveDir)) {
+            try {
+                return Files.createDirectories(customSaveDir);
+            } catch (IOException e) {
+                this.log.error("Failed to create custom save directory {}.", customSaveDir.toAbsolutePath());
+                throw new RuntimeException(e);
             }
         }
 

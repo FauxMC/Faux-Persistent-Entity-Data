@@ -19,7 +19,7 @@ public class MixinPlayerList {
     @Shadow
     private PlayerDataStorage playerIo;
 
-    @Inject(method = "load(Lnet/minecraft/server/level/ServerPlayer;)Lnet/minecraft/nbt/CompoundTag;", at = @At("RETURN"))
+    @Inject(method = "load", at = @At("RETURN"))
     private void onPlayerLoad(ServerPlayer player, CallbackInfoReturnable<CompoundTag> info) {
 
         if (this.playerIo instanceof AccessorPlayerDataStorage accessor) {
